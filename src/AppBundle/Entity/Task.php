@@ -28,6 +28,10 @@ class Task
      */
     private $description;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Issue")
+     */
+    private $issue;
 
     /**
      * Get id
@@ -60,5 +64,21 @@ class Task
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * @return Issue
+     */
+    public function getIssue()
+    {
+        return $this->issue;
+    }
+
+    /**
+     * @param Issue $issue
+     */
+    public function setIssue(Issue $issue)
+    {
+        $this->issue = $issue;
     }
 }
