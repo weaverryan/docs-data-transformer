@@ -13,10 +13,7 @@ class TaskType extends AbstractType
     {
         $builder
             ->add('description', 'textarea')
-            ->add('issue', 'entity', array(
-                'class' => 'AppBundle\Entity\Issue',
-                'property' => 'id'
-            ));
+            ->add('issue', 'text');
 
         $builder->get('description')
             ->addModelTransformer(new CallbackTransformer(
