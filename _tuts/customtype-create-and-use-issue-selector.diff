@@ -1,0 +1,80 @@
+diff --git a/app/config/services.yml b/app/config/services.yml
+index 5c76fc5..4861b57 100644
+--- a/app/config/services.yml
++++ b/app/config/services.yml
+@@ -4,6 +4,8 @@ parameters:
+ #    parameter_name: value
+ 
+ services:
+-#    service_name:
+-#        class: AppBundle\Directory\ClassName
+-#        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
++    app.type.issue_selector:
++        class: AppBundle\Form\IssueSelectorType
++        arguments: ["@doctrine.orm.default_entity_manager"]
++        tags:
++            - { name: form.type, alias: issue_selector }
+diff --git a/src/AppBundle/Form/IssueSelectorType.php b/src/AppBundle/Form/IssueSelectorType.php
+new file mode 100644
+index 0000000..efec358
+--- /dev/null
++++ b/src/AppBundle/Form/IssueSelectorType.php
+@@ -0,0 +1,42 @@
++<?php
++
++namespace AppBundle\Form;
++
++use AppBundle\Form\DataTransformer\IssueToNumberTransformer;
++use Doctrine\Common\Persistence\ObjectManager;
++use Symfony\Component\Form\AbstractType;
++use Symfony\Component\Form\FormBuilderInterface;
++use Symfony\Component\OptionsResolver\OptionsResolverInterface;
++
++class IssueSelectorType extends AbstractType
++{
++    private $em;
++
++    public function __construct(ObjectManager $em)
++    {
++        $this->em = $em;
++    }
++
++    public function buildForm(FormBuilderInterface $builder, array $options)
++    {
++        $transformer = new IssueToNumberTransformer($this->em);
++        $builder->addModelTransformer($transformer);
++    }
++
++    public function setDefaultOptions(OptionsResolverInterface $resolver)
++    {
++        $resolver->setDefaults(array(
++            'invalid_message' => 'The selected issue does not exist',
++        ));
++    }
++
++    public function getParent()
++    {
++        return 'text';
++    }
++
++    public function getName()
++    {
++        return 'issue_selector';
++    }
++}
+diff --git a/src/AppBundle/Form/TaskType.php b/src/AppBundle/Form/TaskType.php
+index 15eb33d..45dfb2d 100644
+--- a/src/AppBundle/Form/TaskType.php
++++ b/src/AppBundle/Form/TaskType.php
+@@ -22,10 +22,7 @@ class TaskType extends AbstractType
+     {
+         $builder
+             ->add('description', 'textarea')
+-            ->add('issue', 'text', array(
+-                // validation message if the data transformer fails
+-                'invalid_message' => 'That is not a valid issue number'
+-            ));
++            ->add('issue', 'issue_selector');
+ 
+         $builder->get('description')
+             ->addModelTransformer(new CallbackTransformer(

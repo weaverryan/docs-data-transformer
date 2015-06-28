@@ -1,0 +1,40 @@
+{
+    "steps": [
+        {
+            "id": "start",
+            "name": "start",
+            "description": null
+        },
+        {
+            "id": "simple-callbacktransformer",
+            "name": "Simple: CallbackTransformer",
+            "description": null
+        },
+        {
+            "id": "entitytransform-changing-to-text-field",
+            "name": "EntityTransform: Changing to text field",
+            "description": null
+        },
+        {
+            "id": "entitytransform-create-initial-transformer",
+            "name": "EntityTransform: Create initial transformer",
+            "description": null
+        },
+        {
+            "id": "entitytransform-add-to-tasktype",
+            "name": "EntityTransform: Add to TaskType",
+            "description": null
+        },
+        {
+            "id": "entitytransform-show-invalid-message",
+            "name": "EntityTransform: Show invalid_message",
+            "description": null
+        },
+        {
+            "id": "customtype-create-and-use-issue-selector",
+            "name": "CustomType: Create and use issue_selector",
+            "description": null
+        }
+    ],
+    "sha": "f2119894108b9bc634e55eb1e778e3036eb80098"
+}

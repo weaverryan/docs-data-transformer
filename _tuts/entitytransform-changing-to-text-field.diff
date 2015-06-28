@@ -1,0 +1,16 @@
+diff --git a/src/AppBundle/Form/TaskType.php b/src/AppBundle/Form/TaskType.php
+index 78f9e45..ed3a350 100644
+--- a/src/AppBundle/Form/TaskType.php
++++ b/src/AppBundle/Form/TaskType.php
+@@ -13,10 +13,7 @@ class TaskType extends AbstractType
+     {
+         $builder
+             ->add('description', 'textarea')
+-            ->add('issue', 'entity', array(
+-                'class' => 'AppBundle\Entity\Issue',
+-                'property' => 'id'
+-            ));
++            ->add('issue', 'text');
+ 
+         $builder->get('description')
+             ->addModelTransformer(new CallbackTransformer(
