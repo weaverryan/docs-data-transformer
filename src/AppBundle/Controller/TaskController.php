@@ -17,7 +17,7 @@ class TaskController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $task = new Task();
-        $form = $this->createForm(new TaskType($em), $task);
+        $form = $this->createForm(new TaskType(), $task);
 
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -40,7 +40,7 @@ class TaskController extends Controller
     public function editAction(Task $task, Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $form = $this->createForm(new TaskType($em), $task);
+        $form = $this->createForm(new TaskType(), $task);
 
         $form->handleRequest($request);
         if ($form->isValid()) {
