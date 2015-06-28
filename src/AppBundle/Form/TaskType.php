@@ -22,7 +22,10 @@ class TaskType extends AbstractType
     {
         $builder
             ->add('description', 'textarea')
-            ->add('issue', 'text');
+            ->add('issue', 'text', array(
+                // validation message if the data transformer fails
+                'invalid_message' => 'That is not a valid issue number'
+            ));
 
         $builder->get('description')
             ->addModelTransformer(new CallbackTransformer(
