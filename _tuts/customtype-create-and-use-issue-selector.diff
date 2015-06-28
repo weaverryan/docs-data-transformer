@@ -14,6 +14,28 @@ index 5c76fc5..4861b57 100644
 +        arguments: ["@doctrine.orm.default_entity_manager"]
 +        tags:
 +            - { name: form.type, alias: issue_selector }
+diff --git a/src/AppBundle/Controller/TaskController.php b/src/AppBundle/Controller/TaskController.php
+index 83f78d8..df52600 100644
+--- a/src/AppBundle/Controller/TaskController.php
++++ b/src/AppBundle/Controller/TaskController.php
+@@ -17,7 +17,7 @@ class TaskController extends Controller
+     {
+         $em = $this->getDoctrine()->getManager();
+         $task = new Task();
+-        $form = $this->createForm(new TaskType($em), $task);
++        $form = $this->createForm(new TaskType(), $task);
+ 
+         $form->handleRequest($request);
+         if ($form->isValid()) {
+@@ -40,7 +40,7 @@ class TaskController extends Controller
+     public function editAction(Task $task, Request $request)
+     {
+         $em = $this->getDoctrine()->getManager();
+-        $form = $this->createForm(new TaskType($em), $task);
++        $form = $this->createForm(new TaskType(), $task);
+ 
+         $form->handleRequest($request);
+         if ($form->isValid()) {
 diff --git a/src/AppBundle/Form/IssueSelectorType.php b/src/AppBundle/Form/IssueSelectorType.php
 new file mode 100644
 index 0000000..efec358
@@ -63,10 +85,30 @@ index 0000000..efec358
 +    }
 +}
 diff --git a/src/AppBundle/Form/TaskType.php b/src/AppBundle/Form/TaskType.php
-index 15eb33d..45dfb2d 100644
+index 15eb33d..8aab08f 100644
 --- a/src/AppBundle/Form/TaskType.php
 +++ b/src/AppBundle/Form/TaskType.php
-@@ -22,10 +22,7 @@ class TaskType extends AbstractType
+@@ -2,8 +2,6 @@
+ 
+ namespace AppBundle\Form;
+ 
+-use AppBundle\Form\DataTransformer\IssueToNumberTransformer;
+-use Doctrine\Common\Persistence\ObjectManager;
+ use Symfony\Component\Form\AbstractType;
+ use Symfony\Component\Form\CallbackTransformer;
+ use Symfony\Component\Form\FormBuilderInterface;
+@@ -11,21 +9,11 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
+ 
+ class TaskType extends AbstractType
+ {
+-    private $em;
+-
+-    public function __construct(ObjectManager $em)
+-    {
+-        $this->em = $em;
+-    }
+-
+     public function buildForm(FormBuilderInterface $builder, array $options)
      {
          $builder
              ->add('description', 'textarea')
@@ -78,3 +120,13 @@ index 15eb33d..45dfb2d 100644
  
          $builder->get('description')
              ->addModelTransformer(new CallbackTransformer(
+@@ -41,9 +29,6 @@ class TaskType extends AbstractType
+                     return str_replace("\n", '<br/>', $cleaned);
+                 }
+             ));
+-
+-        $builder->get('issue')
+-            ->addModelTransformer(new IssueToNumberTransformer($this->em));
+     }
+ 
+     public function configureOptions(OptionsResolver $resolver)
