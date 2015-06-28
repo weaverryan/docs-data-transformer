@@ -77,7 +77,7 @@ class Task
     /**
      * @param Issue $issue
      */
-    public function setIssue(Issue $issue)
+    public function setIssue(Issue $issue = null)
     {
         $this->issue = $issue;
     }
