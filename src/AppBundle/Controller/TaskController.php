@@ -15,12 +15,12 @@ class TaskController extends Controller
      */
     public function indexAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
         $task = new Task();
-        $form = $this->createForm(new TaskType(), $task);
+        $form = $this->createForm(new TaskType($em), $task);
 
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
             $em->persist($task);
             $em->flush();
 
@@ -39,11 +39,11 @@ class TaskController extends Controller
      */
     public function editAction(Task $task, Request $request)
     {
-        $form = $this->createForm(new TaskType(), $task);
+        $em = $this->getDoctrine()->getManager();
+        $form = $this->createForm(new TaskType($em), $task);
 
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
             $em->persist($task);
             $em->flush();
 

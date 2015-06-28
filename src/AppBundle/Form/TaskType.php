@@ -2,6 +2,8 @@
 
 namespace AppBundle\Form;
 
+use AppBundle\Form\DataTransformer\IssueToNumberTransformer;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -9,6 +11,13 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TaskType extends AbstractType
 {
+    private $em;
+
+    public function __construct(ObjectManager $em)
+    {
+        $this->em = $em;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -29,6 +38,9 @@ class TaskType extends AbstractType
                     return str_replace("\n", '<br/>', $cleaned);
                 }
             ));
+
+        $builder->get('issue')
+            ->addModelTransformer(new IssueToNumberTransformer($this->em));
     }
 
     public function configureOptions(OptionsResolver $resolver)
